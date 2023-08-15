@@ -21,7 +21,6 @@
         "allowJs": true,
         "target": "es2020",
         "outDir": ".build",
-        "rootDir": "./",
         "module": "commonjs"
     },
     "include": ["src/**/*.ts", "test.ts"],

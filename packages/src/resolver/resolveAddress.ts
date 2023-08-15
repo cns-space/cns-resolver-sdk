@@ -1,6 +1,7 @@
 import { Buffer } from 'buffer';
-import axios from 'axios';
 import dotenv from 'dotenv';
+import { blockfrostGet } from '../utils/blockfrost';
+import { validateCNS } from '../utils/validator';
 
 dotenv.config();
 
@@ -10,18 +11,14 @@ const baseApiUrl = 'https://cardano-preprod.blockfrost.io/api/v0';
 
 export const resolveAddress = async (cnsName: string): Promise<string> => {
   const assetName = Buffer.from(cnsName).toString('hex');
+  const [notExpired] = await validateCNS(baseApiUrl, policyID, assetName, apiKey);
+  if (!notExpired) return "CNS expired"
+
   const url = `${baseApiUrl}/assets/${policyID}${assetName}/addresses`
-  const data = await axios.get(url, {
-    headers: {
-      project_id: apiKey,
-      'Content-Type': 'application/json'
-    }
-  }).then((res) => res.data).catch((err) => console.log(err));
-  if (!data) {
-    return "CNS not found"
-  }
+  const data = await blockfrostGet(url, apiKey)
+  if (!data) return "CNS not found"
+
   const { address } = data[0];
-  console.log(address);
   return address
 }
 

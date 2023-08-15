@@ -10,12 +10,14 @@ export const parseInlineDatum = <T>(inlineDatum: string): T => {
 export const deserializeHex = (hexString: string): string =>
   Buffer.from(hexString, 'hex').toString('utf8');
 
-export const parseAssocMap = (assocMap: AssocMap<BuiltinByteString, BuiltinByteString>): { [key: string]: string } => {
+export const parseAssocMap = (assocMap: AssocMap<BuiltinByteString, BuiltinByteString>, limit = 999): { [key: string]: string } => {
   const parsedAssocMap: { [key: string]: string } = {}
-  assocMap.map.forEach((mapItem) => {
+  for (let i = 0; i < limit; i += 1) {
+    if (i >= assocMap.map.length) break
+    const mapItem = assocMap.map[i]
     const key = deserializeHex(mapItem.k.bytes)
     const value = deserializeHex(mapItem.v.bytes)
     parsedAssocMap[key] = value
-  })
+  }
   return parsedAssocMap
 }
