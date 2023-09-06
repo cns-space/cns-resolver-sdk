@@ -6,6 +6,7 @@ export type PaymentPubKeyHash = BuiltinByteString;
 export type PubKeyHash = PaymentPubKeyHash;
 export type POSIXTime = Integer;
 export type MaybeStakingHash = ConStr<1, []> | ConStr<0, [ConStr<0, ConStr<0, BuiltinByteString[]>[]>]>;
+export type PubKeyAddress = ConStr<0, [ConStr<0, [PubKeyHash]>, MaybeStakingHash]>;
 export type ScriptAddress = ConStr<0, [ConStr<1, [ValidatorHash]>, MaybeStakingHash]>;
 export type AssetClass = { constructor: 0; fields: [{ bytes: string }, { bytes: string }] };
 export type AssocMapItem<K, V> = { k: K; v: V };
@@ -36,6 +37,11 @@ export const maybeStakingHash = (stakeCredential: string): MaybeStakingHash => {
   }
   return conStr0([conStr0([conStr0([builtinByteString(stakeCredential)])])]);
 };
+export const pubKeyAddress = (bytes: string, stakeCredential?: string): PubKeyAddress =>
+  conStr0<[ConStr<0, [BuiltinByteString]>, MaybeStakingHash]>([
+    conStr0<[BuiltinByteString]>([builtinByteString(bytes)]),
+    maybeStakingHash(stakeCredential || ''),
+  ]);
 export const scriptAddress = (bytes: string, stakeCredential?: string): ScriptAddress =>
   conStr0<[ConStr<1, [BuiltinByteString]>, MaybeStakingHash]>([
     conStr1<[BuiltinByteString]>([builtinByteString(bytes)]),

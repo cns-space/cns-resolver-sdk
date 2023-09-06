@@ -1,18 +1,16 @@
-import { BuiltinByteString, ConStr0, builtinByteString, conStr0, assocMap, AssocMap } from './plutus'
+import { BuiltinByteString, ConStr, builtinByteString, conStr0, assocMap, AssocMap, PubKeyAddress, ScriptAddress } from './plutus'
 
-export type CNSUserRecord = ConStr0<[AssocMap<BuiltinByteString, BuiltinByteString>, AssocMap<BuiltinByteString, BuiltinByteString>]>
+export type CNSUserRecord = ConStr<0, [AssocMap<BuiltinByteString, PubKeyAddress | ScriptAddress>, AssocMap<BuiltinByteString, BuiltinByteString>, AssocMap<BuiltinByteString, BuiltinByteString>]>
 
-export const cnsUserRecord = (virtualDomains: [string, string][], mobile: string, email: string, twitter: string, discord: string, telegram: string) => {
-  const virtualDomainsMap = assocMap(virtualDomains.map(([virtualDomain, virtualDomainAddress]) => [builtinByteString(virtualDomain), builtinByteString(virtualDomainAddress)]))
-  const socialRecords = [["mobile", mobile], ["email", email], ["twitter", twitter], ["discord", discord], ["telegram", telegram]]
-  const socialRecordsMap = assocMap(socialRecords.map(([socialDomain, socialDomainAddress]) => [builtinByteString(socialDomain), builtinByteString(socialDomainAddress)]))
-  return conStr0([virtualDomainsMap, socialRecordsMap])
+export const cnsUserRecord = (virtualDomains: [string, PubKeyAddress | ScriptAddress][], socialProfiles: string[][], otherRecords: string[][]): CNSUserRecord => {
+  const virtualDomainsMap = assocMap(virtualDomains.map(([virtualDomain, address]) => [builtinByteString(virtualDomain), address]))
+  const socialProfilesMap = assocMap(socialProfiles.map(([socialDomain, socialDomainAddress]) => [builtinByteString(socialDomain), builtinByteString(socialDomainAddress)]))
+  const otherRecordsMap = assocMap(otherRecords.map(([recordKey, recordValue]) => [builtinByteString(recordKey), builtinByteString(recordValue)]))
+  return conStr0([virtualDomainsMap, socialProfilesMap, otherRecordsMap])
 }
 
 export type ParsedCNSUserRecord = {
-  virtualDomains: { [key: string]: string },
+  virtualDomains: { [key: string]: string }
   socialProfiles: { [key: string]: string }
+  otherRecords: { [key: string]: string }
 }
-
-// const myRecord = cnsRecord([['key1', 'value1'], ['key2', 'value2']], 'mobile', 'email', 'twitter', 'discord', 'telegram')
-// console.log(JSON.stringify(myRecord));
