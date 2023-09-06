@@ -1,11 +1,6 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-        "paths": {
-            "@resolver/*": ["src/resolver/*"],
-            "@utils/*": ["src/utils/*"],
-            "@type/*": ["src/type/*"]
-        },
         "lib": ["ESNext"],
         "moduleResolution": "node",
         "noUnusedLocals": true,
@@ -21,7 +16,7 @@
         "allowJs": true,
         "target": "es2020",
         "outDir": ".build",
-        "module": "commonjs"
+        "module": "CommonJS"
     },
     "include": ["src/**/*.ts", "test.ts"],
     "exclude": ["node_modules/**/*", ".vscode/**/*", ".idea/**/*"]

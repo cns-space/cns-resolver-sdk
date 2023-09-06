@@ -1,7 +1,7 @@
 {
   "name": "@cns-space/resolver-sdk",
   "version": "1.0.0",
-  "main": "index.ts",
+  "type": "commonjs",
   "repository": "https://github.com/cns-space/cns-resolver-sdk.git",
   "author": "cns-space",
   "license": "MIT",
@@ -9,8 +9,7 @@
     "@emurgo/cardano-serialization-lib-nodejs": "^11.4.0",
     "@types/node": "^20.4.10",
     "axios": "^1.4.0",
-    "dotenv": "^16.3.1",
-    "ts-node": "^10.9.1"
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.114",
