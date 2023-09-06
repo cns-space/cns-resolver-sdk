@@ -39,14 +39,14 @@ This is the for resolving official CNS information. This documentation would out
 
 1. Expiry - Expiry Validation
 
-   - Read the metadata attached with the CNS, and get the expiry field
-   - Compare the current millisecond with expiry record
-   - Valid if current millisecond < expiry
+   - Read the metadata attached with the CNS, and get the `expiry` field
+   - Compare the `current millisecond` with `expiry` record
+   - Valid if `current millisecond < expiry`
 
 2. Enabled - Virtual Sub-domain Enabled
 
    - Read the metadata attached with the CNS, and get the virtual Subdomain.
-   - Valid if "Enabled"
+   - Valid if `Enabled`
 
 ## Schemas
 
