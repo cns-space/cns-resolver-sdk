@@ -1,19 +1,16 @@
-export type ConStr<N, T> = { constructor: N; fields: T };
-export type ConStr0<T> = { constructor: 0; fields: T };
-export type ConStr1<T> = { constructor: 1; fields: T };
-export type ConStr2<T> = { constructor: 2; fields: T };
+export type ConStr<N extends number, T> = { constructor: N; fields: T };
 export type BuiltinByteString = { bytes: string };
 export type Integer = { int: number };
 export type ValidatorHash = BuiltinByteString;
 export type PaymentPubKeyHash = BuiltinByteString;
 export type PubKeyHash = PaymentPubKeyHash;
 export type POSIXTime = Integer;
-export type MaybeStakingHash = ConStr1<[]> | ConStr0<[ConStr0<ConStr0<BuiltinByteString[]>[]>]>;
-export type ScriptAddress = ConStr0<[ConStr1<[ValidatorHash]>, MaybeStakingHash]>;
+export type MaybeStakingHash = ConStr<1, []> | ConStr<0, [ConStr<0, ConStr<0, BuiltinByteString[]>[]>]>;
+export type ScriptAddress = ConStr<0, [ConStr<1, [ValidatorHash]>, MaybeStakingHash]>;
 export type AssetClass = { constructor: 0; fields: [{ bytes: string }, { bytes: string }] };
 export type AssocMapItem<K, V> = { k: K; v: V };
 export type AssocMap<K, V> = { map: AssocMapItem<K, V>[] }
-export type Tuple<K, V> = ConStr0<[K, V]>
+export type Tuple<K, V> = ConStr<0, [K, V]>
 export type PlutusData =
   | BuiltinByteString
   | Integer
@@ -24,14 +21,14 @@ export type PlutusData =
   | PubKeyHash
   | POSIXTime
 
-export const conStr = <N, T>(constructor: N, fields: T): ConStr<N, T> => ({
+export const conStr = <N extends number, T>(constructor: N, fields: T): ConStr<N, T> => ({
   constructor,
   fields,
 });
 
-export const conStr0 = <T>(fields: T): ConStr0<T> => conStr<0, T>(0, fields);
-export const conStr1 = <T>(fields: T): ConStr1<T> => conStr<1, T>(1, fields);
-export const conStr2 = <T>(fields: T): ConStr2<T> => conStr<2, T>(2, fields);
+export const conStr0 = <T>(fields: T) => conStr<0, T>(0, fields);
+export const conStr1 = <T>(fields: T) => conStr<1, T>(1, fields);
+export const conStr2 = <T>(fields: T) => conStr<2, T>(2, fields);
 export const builtinByteString = (bytes: string): BuiltinByteString => ({ bytes });
 export const maybeStakingHash = (stakeCredential: string): MaybeStakingHash => {
   if (stakeCredential === '') {
@@ -40,7 +37,7 @@ export const maybeStakingHash = (stakeCredential: string): MaybeStakingHash => {
   return conStr0([conStr0([conStr0([builtinByteString(stakeCredential)])])]);
 };
 export const scriptAddress = (bytes: string, stakeCredential?: string): ScriptAddress =>
-  conStr0<[ConStr1<[BuiltinByteString]>, MaybeStakingHash]>([
+  conStr0<[ConStr<1, [BuiltinByteString]>, MaybeStakingHash]>([
     conStr1<[BuiltinByteString]>([builtinByteString(bytes)]),
     maybeStakingHash(stakeCredential || ''),
   ]);

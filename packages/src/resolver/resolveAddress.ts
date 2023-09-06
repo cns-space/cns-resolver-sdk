@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import dotenv from 'dotenv';
-import { blockfrostGet } from '../utils/blockfrost';
+import { blockfrostGet } from '@utils/blockfrost';
 import { validateCNS } from '../utils/validator';
 
 dotenv.config();
@@ -23,4 +23,4 @@ export const resolveAddress = async (cnsName: string): Promise<string> => {
 }
 
 // Example:
-// resolveAddress('a9667.ada').then((res) => console.log(res));
+resolveAddress('a9667.ada').then((res) => console.log(res));
