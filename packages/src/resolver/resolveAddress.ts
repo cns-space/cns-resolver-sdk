@@ -1,21 +1,24 @@
 import { Buffer } from 'buffer';
 import dotenv from 'dotenv';
-import { blockfrostGet } from '@utils/blockfrost';
-import { validateCNS } from '../utils/validator';
+import { validateExpiry } from '../validators';
+import { CNSMetadata } from '../type/cnsMetadata';
+import { BlockfrostCNS } from '../fetcher';
 
 dotenv.config();
 
 const apiKey = process.env.BLOCKFROST_API_KEY as string;
 const policyID = 'fc0e0323b254c0eb7275349d1e32eb6cc7ecfd03f3b71408eb46d751';
-const baseApiUrl = 'https://cardano-preprod.blockfrost.io/api/v0';
 
 export const resolveAddress = async (cnsName: string): Promise<string> => {
   const assetName = Buffer.from(cnsName).toString('hex');
-  const [notExpired] = await validateCNS(baseApiUrl, policyID, assetName, apiKey);
-  if (!notExpired) return "CNS expired"
+  const assetHex = `${policyID}${assetName}`
 
-  const url = `${baseApiUrl}/assets/${policyID}${assetName}/addresses`
-  const data = await blockfrostGet(url, apiKey)
+  const blockfrost = new BlockfrostCNS(apiKey, 'preprod')
+  const metadata: CNSMetadata = await blockfrost.getMetadata(assetHex)
+
+  if (!validateExpiry(metadata)) return "CNS expired"
+
+  const data = await blockfrost.getAssetAddress(assetHex)
   if (!data) return "CNS not found"
 
   const { address } = data[0];
@@ -23,4 +26,4 @@ export const resolveAddress = async (cnsName: string): Promise<string> => {
 }
 
 // Example:
-resolveAddress('a9667.ada').then((res) => console.log(res));
+// resolveAddress('a9667.ada').then((res) => console.log(res));
