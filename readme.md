@@ -28,12 +28,12 @@ This is the for resolving official CNS information. This documentation would out
 
 ## Resolving Methodology
 
-| Item                       | Validation       | Resolving Methods                                                                                      | SDK API    |
-| -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------ | ---------- |
-| Domain Address             | Expiry           | 1. Get the current address the CNS residing on                                                         | Developing |
-| Virtual Sub-domain Address | Expiry & Enabled | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct virtual sub-domain key | Developing |
-| Social Handles             | Expiry           | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct social key             | Developing |
-| Customized Records         | Expiry           | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct key                    | Developing |
+| Item                       | Validation       | Resolving Methods                                                                                      | SDK API                                                                                                      |
+| -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| Domain Address             | Expiry           | 1. Get the current address the CNS residing on                                                         | Draft of [`resolveAddress`](./packages/src/resolver/resolveAddress.ts)                                       |
+| Virtual Sub-domain Address | Expiry & Enabled | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct virtual sub-domain key | Draft of [resolveVirtualSubdomain & resolveVirtualSubdomains](./packages/src/resolver/resolveUserRecords.ts) |
+| Social Handles             | Expiry           | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct social key             | Draft of [resolveSocialProfiles](./packages/src/resolver/resolveUserRecords.ts)                              |
+| Customized Records         | Expiry           | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct key                    | Draft of [resolveOtherRecords](./packages/src/resolver/resolveUserRecords.ts)                                |
 
 ## Validation Approach
 
@@ -42,11 +42,13 @@ This is the for resolving official CNS information. This documentation would out
    - Read the metadata attached with the CNS, and get the `expiry` field
    - Compare the `current millisecond` with `expiry` record
    - Valid if `current millisecond < expiry`
+   - [`Example implementation`](./packages/src/validators/expiry.ts)
 
 2. Enabled - Virtual Sub-domain Enabled
 
    - Read the metadata attached with the CNS, and get the virtual Subdomain.
    - Valid if `Enabled`
+   - [`Example implementation`](./packages/src/validators/virtualSubdomainEnabled.ts)
 
 ## Schemas
 
