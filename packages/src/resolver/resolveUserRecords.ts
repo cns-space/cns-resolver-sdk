@@ -32,7 +32,7 @@ export const resolveUserRecord = async (cnsName: string): Promise<ParsedCNSUserR
   if (!validateVirtualSubdomainEnabled(metadata)) console.log("Virtual subdomain is not enabled");
 
   const parsedInlineDatum: ParsedCNSUserRecord = {
-    virtualDomains: validateVirtualSubdomainEnabled(metadata) ? parseAssocMap(inlineDatum.fields[0], (item) => parsePlutusAddressToBech32(objToHex(item), networkId || 0)) : [],
+    virtualSubdomains: validateVirtualSubdomainEnabled(metadata) ? parseAssocMap(inlineDatum.fields[0], (item) => parsePlutusAddressToBech32(objToHex(item), networkId || 0)) : [],
     socialProfiles: parseAssocMap(inlineDatum.fields[1], (item) => hexToString(item.bytes)),
     otherRecords: parseAssocMap(inlineDatum.fields[2], (item) => hexToString(item.bytes)),
   }
@@ -42,19 +42,19 @@ export const resolveUserRecord = async (cnsName: string): Promise<ParsedCNSUserR
 // Example:
 // resolveUserRecord('a9667.ada').then((res) => console.log(res));
 
-export const resolveVirtualDomains = async (cnsName: string): Promise<string[][] | string> => {
+export const resolveVirtualSubdomains = async (cnsName: string): Promise<string[][] | string> => {
   const parsedUserRecord = await resolveUserRecord(cnsName)
   if (typeof parsedUserRecord === 'string') return parsedUserRecord
-  return parsedUserRecord.virtualDomains
+  return parsedUserRecord.virtualSubdomains
 }
 // Example:
 // resolveVirtualDomains('a9667.ada').then((res) => console.log(res));
 
-export const resolveVirtualDomain = async (virtualDomain: string): Promise<string> => {
+export const resolveVirtualSubdomain = async (virtualDomain: string): Promise<string> => {
   const [target, cnsName, ext] = virtualDomain.split('.')
   if (!target || !cnsName || !ext) return "Invalid virtual domain"
 
-  const virtualDomains = await resolveVirtualDomains(`${cnsName}.${ext}`)
+  const virtualDomains = await resolveVirtualSubdomains(`${cnsName}.${ext}`)
   if (typeof virtualDomains === 'string') return virtualDomains
 
   const resolvedVirtualDomain = virtualDomains?.find(([key]) => key === target)

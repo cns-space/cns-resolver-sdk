@@ -10,7 +10,7 @@ export const cnsUserRecord = (virtualDomains: [string, PubKeyAddress | ScriptAdd
 }
 
 export type ParsedCNSUserRecord = {
-  virtualDomains: string[][]
+  virtualSubdomains: string[][]
   socialProfiles: string[][]
   otherRecords: string[][]
 }
