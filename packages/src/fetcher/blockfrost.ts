@@ -1,4 +1,5 @@
 import axios, { Axios } from "axios"
+import { parseInlineDatum } from "../utils"
 
 export class BlockfrostCNS {
   axios: Axios
@@ -18,16 +19,17 @@ export class BlockfrostCNS {
     return response.data
   }
 
-  getMetadata = async <T>(assetHex: string): Promise<T> => {
-    const response = await this.axios.get(`/assets/${assetHex}`)
+  getMetadata = async <T>(policyID: string, assetName: string): Promise<T> => {
+    const response = await this.axios.get(`/assets/${policyID}${assetName}`)
     return response.data.onchain_metadata
   }
 
-  getAssetInlineDatum = async (assetHex: string): Promise<string> => {
+  getAssetInlineDatum = async <T>(assetHex: string): Promise<T> => {
     const txData = await this.axios.get(`/assets/${assetHex}/transactions?order=desc&count=1`)
     const { tx_hash } = txData.data[0];
     const recordTx = await this.axios.get(`/txs/${tx_hash}/utxos`)
-    const inlineDatum = recordTx.data.outputs.find((o) => o.amount.findIndex((a) => a.unit === assetHex) !== -1)?.inline_datum
+    const rawInlineDatum = recordTx.data.outputs.find((o) => o.amount.findIndex((a) => a.unit === assetHex) !== -1)?.inline_datum
+    const inlineDatum = parseInlineDatum<T>(rawInlineDatum)
     return inlineDatum
   }
 }

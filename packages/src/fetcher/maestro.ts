@@ -24,11 +24,11 @@ export class MaestroCNS {
     return response.data.data.latest_mint_tx_metadata['721'][policyID][hexToString(assetName)]
   }
 
-  getAssetInlineDatum = async (assetHex: string): Promise<string> => {
-    const txData = await this.axios.get(`/assets/${assetHex}/transactions?order=desc&count=1`)
-    const { tx_hash } = txData.data[0];
-    const recordTx = await this.axios.get(`/transactions/${tx_hash}/utxos`)
-    const inlineDatum = recordTx.data.outputs.find((o) => o.amount.findIndex((a) => a.unit === assetHex) !== -1)?.inline_datum
+  getAssetInlineDatum = async <T>(assetHex: string): Promise<T> => {
+    const txData = await this.axios.get(`/assets/${assetHex}/txs?order=desc&count=1`)
+    const { tx_hash } = txData.data.data[0];
+    const recordTx = await this.axios.get(`/transactions/${tx_hash}`)
+    const inlineDatum = recordTx.data.data.outputs.find((o) => o.assets.findIndex((a) => a.unit === assetHex) !== -1)?.datum.json
     return inlineDatum
   }
 }
