@@ -1,0 +1,63 @@
+{
+  "name": "@cns-space/resolver-sdk",
+  "description": "CNS resolver sdk for querying on-chain user records",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/mjs/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "homepage": "https://github.com/cns-space/cns-resolver-sdk",
+  "author": {
+    "name": "cns-space",
+    "email": "hinson@cns.space"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cns-space/cns-resolver-sdk.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "blockchain",
+    "cardano",
+    "maestro",
+    "blockfrost",
+    "cardano-name-service",
+    "cns"
+  ],
+  "scripts": {
+    "build": "rm -fr dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "ci": "yarn && yarn lint && yarn build",
+    "lint": "eslint '*/**/*.ts'",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@emurgo/cardano-serialization-lib-nodejs": "^11.4.0",
+    "@types/node": "^20.4.10",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.114",
+    "@types/jest": "^29.5.1",
+    "@types/pg": "^8.10.2",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.5.0",
+    "prettier": "^2.8.8",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.1.6"
+  }
+}
