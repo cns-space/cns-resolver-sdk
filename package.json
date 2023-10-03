@@ -1,5 +1,5 @@
 {
-  "name": "@cns-space/resolver-sdk",
+  "name": "@cns-space/cns-resolver-sdk",
   "description": "CNS resolver sdk for querying on-chain user records",
   "version": "0.0.1",
   "license": "MIT",
