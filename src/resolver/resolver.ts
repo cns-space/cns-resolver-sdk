@@ -5,21 +5,34 @@ import {
 } from '../validators';
 import { CNSMetadata, CNSUserRecord, ParsedCNSUserRecord } from '../type';
 import { CNSFetcher } from '../fetcher/fetcher';
-import { cnsPolicyID, recordPolicyID } from '../constants';
+import { CNSConstants } from '../constants';
 import { hexToString, objToHex, parseAssocMap, parsePlutusAddressToBech32 } from '../utils';
 
 export class CNSResolver {
     fetcher: CNSFetcher;
 
+    constants: CNSConstants;
+
     constructor(fetcher: CNSFetcher) {
         this.fetcher = fetcher;
+        this.constants = new CNSConstants(fetcher.network);
     }
 
     resolveAddress = async (cnsName: string): Promise<string> => {
-        const assetName = Buffer.from(cnsName).toString('hex');
-        const assetHex = `${cnsPolicyID}${assetName}`;
+        const [target, domain, ext] = cnsName.split('.');
+        if (!target && domain && ext) return this.resolveDomain(cnsName);
+        if (target && domain && ext) return this.resolveVirtualSubdomain(cnsName);
+        return 'Invalid domain / virtual domain';
+    };
 
-        const metadata: CNSMetadata = await this.fetcher.getMetadata(cnsPolicyID, assetName);
+    private resolveDomain = async (cnsName: string): Promise<string> => {
+        const assetName = Buffer.from(cnsName).toString('hex');
+        const assetHex = `${this.constants.cnsPolicyID}${assetName}`;
+
+        const metadata: CNSMetadata = await this.fetcher.getMetadata(
+            this.constants.cnsPolicyID,
+            assetName,
+        );
 
         if (!validateExpiry(metadata)) return 'CNS expired';
 
@@ -33,11 +46,14 @@ export class CNSResolver {
     resolveUserRecord = async (cnsName: string): Promise<ParsedCNSUserRecord | string> => {
         const assetName = Buffer.from(cnsName).toString('hex');
 
-        const metadata: CNSMetadata = await this.fetcher.getMetadata(cnsPolicyID, assetName);
+        const metadata: CNSMetadata = await this.fetcher.getMetadata(
+            this.constants.cnsPolicyID,
+            assetName,
+        );
 
         if (!validateExpiry(metadata)) return 'CNS expired';
 
-        const recordAssetHex = `${recordPolicyID}${assetName}`;
+        const recordAssetHex = `${this.constants.recordPolicyID}${assetName}`;
         const inlineDatum: CNSUserRecord = await this.fetcher.getAssetInlineDatum(recordAssetHex);
 
         if (!validateCNSUserRecord(inlineDatum)) return 'Invalid user record';
@@ -67,9 +83,8 @@ export class CNSResolver {
     // Example:
     // resolveVirtualSubdomains('bbb.ada').then((res) => console.log(res));
 
-    resolveVirtualSubdomain = async (virtualDomain: string): Promise<string> => {
+    private resolveVirtualSubdomain = async (virtualDomain: string): Promise<string> => {
         const [target, cnsName, ext] = virtualDomain.split('.');
-        if (!target || !cnsName || !ext) return 'Invalid virtual domain';
 
         const virtualDomains = await this.resolveVirtualSubdomains(`${cnsName}.${ext}`);
         if (typeof virtualDomains === 'string') return virtualDomains;
@@ -79,8 +94,6 @@ export class CNSResolver {
 
         return resolvedVirtualDomain[1];
     };
-    // Example
-    // resolveVirtualSubdomain('456.bbb.ada').then((res) => console.log(res));
 
     resolveSocialRecords = async (cnsName: string): Promise<string[][] | string> => {
         const parsedUserRecord = await this.resolveUserRecord(cnsName);
@@ -90,11 +103,29 @@ export class CNSResolver {
     // // Example
     // resolveSocialRecords('bbb.ada').then((res) => console.log(res));
 
+    resolveSocialRecord = async (cnsName: string, socialName: string): Promise<string> => {
+        const socialRecords = await this.resolveSocialRecords(cnsName);
+        if (typeof socialRecords === 'string') return socialRecords;
+
+        const resolvedSocialRecord = socialRecords?.find(([key]) => key === socialName);
+        if (!resolvedSocialRecord) return 'Social record not found';
+
+        return resolvedSocialRecord[1];
+    };
+
     resolveOtherRecords = async (cnsName: string): Promise<string[][] | string> => {
         const parsedUserRecord = await this.resolveUserRecord(cnsName);
         if (typeof parsedUserRecord === 'string') return parsedUserRecord;
         return parsedUserRecord.otherRecords;
     };
-    // // Example
-    // resolveOtherRecords('bbb.ada').then((res) => console.log(res));
+
+    resolveOtherRecord = async (cnsName: string, otherName: string): Promise<string> => {
+        const otherRecords = await this.resolveOtherRecords(cnsName);
+        if (typeof otherRecords === 'string') return otherRecords;
+
+        const resolvedOtherRecord = otherRecords?.find(([key]) => key === otherName);
+        if (!resolvedOtherRecord) return 'Other record not found';
+
+        return resolvedOtherRecord[1];
+    };
 }

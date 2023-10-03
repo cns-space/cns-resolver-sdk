@@ -1,6 +1,6 @@
-import { CNSMetadata } from "../type/cnsMetadata";
+import { CNSMetadata } from '../type/cnsMetadata';
 
 export const validateVirtualSubdomainEnabled = (metadata: CNSMetadata) => {
-  const { virtualSubdomainEnabled } = metadata
-  return virtualSubdomainEnabled === "Enabled"
-}
+    const { virtualSubdomainEnabled } = metadata;
+    return virtualSubdomainEnabled === 'Enabled';
+};

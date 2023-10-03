@@ -6,7 +6,7 @@ import { CNSFetcher } from './fetcher';
 export class BlockfrostCNS extends CNSFetcher {
     axios: Axios;
 
-    constructor(apiKey: string, network: 'mainnet' | 'preprod' | 'preview') {
+    constructor(apiKey: string, network: 'mainnet' | 'preprod') {
         super(network);
         this.axios = axios.create({
             baseURL: `https://cardano-${network}.blockfrost.io/api/v0`,

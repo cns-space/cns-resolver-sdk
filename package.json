@@ -34,7 +34,7 @@
   "scripts": {
     "build": "rm -fr dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "ci": "yarn && yarn lint && yarn build",
-    "lint": "eslint '*/**/*.ts'",
+    "lint": "eslint '*/**/*.ts' --fix",
     "prepare": "husky install"
   },
   "dependencies": {

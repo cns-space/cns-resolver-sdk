@@ -1,9 +1,9 @@
 export abstract class CNSFetcher {
     networkId: number;
 
-    network: 'mainnet' | 'preprod' | 'preview';
+    network: 'mainnet' | 'preprod';
 
-    constructor(network: 'mainnet' | 'preprod' | 'preview') {
+    constructor(network: 'mainnet' | 'preprod') {
         this.network = network;
         this.networkId = network === 'mainnet' ? 1 : 0;
     }

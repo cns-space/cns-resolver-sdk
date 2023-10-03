@@ -6,7 +6,7 @@ import { CNSFetcher } from './fetcher';
 export class MaestroCNS extends CNSFetcher {
     axios: Axios;
 
-    constructor(apiKey: string, network: 'mainnet' | 'preprod' | 'preview') {
+    constructor(apiKey: string, network: 'mainnet' | 'preprod') {
         super(network);
         this.axios = axios.create({
             baseURL: `https://${network}.gomaestro-api.org/v1`,

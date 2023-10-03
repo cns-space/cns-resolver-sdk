@@ -1,3 +1,3 @@
-export * from './datumType'
-export * from './expiry'
-export * from './virtualSubdomainEnabled'
+export * from './datumType';
+export * from './expiry';
+export * from './virtualSubdomainEnabled';
