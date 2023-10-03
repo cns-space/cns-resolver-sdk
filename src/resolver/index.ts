@@ -1,2 +1,1 @@
-export * from "./resolveAddress"
-export * from "./resolveUserRecords"
+export * from './resolver';
