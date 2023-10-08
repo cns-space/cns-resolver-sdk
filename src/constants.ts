@@ -1,5 +1,5 @@
-const preprodCnsPolicyID = 'fc0e0323b254c0eb7275349d1e32eb6cc7ecfd03f3b71408eb46d751';
-const preprodRecordPolicyID = '3cb87ba516477b0790ce10e8c5c35e6ce5f4ef0c9d10afb945bbdc91';
+const preprodCnsPolicyID = 'ab4e38cc1e95e42c6f6e56d8d4243731c483bb57e49da5047c38e9d8';
+const preprodRecordPolicyID = 'c0f778be07f8b129d2546ad37b0e13b3486747dfe1767ff8e7e8a4f3';
 
 // TODO: Change after mainnet launch
 const mainnetCnsPolicyID = '';
