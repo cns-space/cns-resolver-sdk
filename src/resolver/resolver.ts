@@ -1,10 +1,9 @@
-import { SocialRecord } from 'type/socialRecords';
 import {
     validateCNSUserRecord,
     validateExpiry,
     validateVirtualSubdomainEnabled,
 } from '../validators';
-import { CNSMetadata, CNSUserRecord, ParsedCNSUserRecord } from '../type';
+import { CNSMetadata, CNSUserRecord, ParsedCNSUserRecord, SocialRecord } from '../type';
 import { CNSFetcher } from '../fetcher/fetcher';
 import { CNSConstants } from '../constants';
 import { hexToString, objToHex, parseAssocMap, parsePlutusAddressToBech32 } from '../utils';
