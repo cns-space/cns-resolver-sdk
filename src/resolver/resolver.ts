@@ -1,3 +1,4 @@
+import { SocialRecord } from 'type/socialRecords';
 import {
     validateCNSUserRecord,
     validateExpiry,
@@ -19,9 +20,9 @@ export class CNSResolver {
     }
 
     resolveAddress = async (cnsName: string): Promise<string> => {
-        const [target, domain, ext] = cnsName.split('.');
-        if (!target && domain && ext) return this.resolveDomain(cnsName);
-        if (target && domain && ext) return this.resolveVirtualSubdomain(cnsName);
+        const deconstructedCns = cnsName.split('.');
+        if (deconstructedCns.length === 2) return this.resolveDomain(cnsName);
+        if (deconstructedCns.length === 3) return this.resolveVirtualSubdomain(cnsName);
         return 'Invalid domain / virtual domain';
     };
 
@@ -103,7 +104,7 @@ export class CNSResolver {
     // // Example
     // resolveSocialRecords('bbb.ada').then((res) => console.log(res));
 
-    resolveSocialRecord = async (cnsName: string, socialName: string): Promise<string> => {
+    resolveSocialRecord = async (cnsName: string, socialName: SocialRecord): Promise<string> => {
         const socialRecords = await this.resolveSocialRecords(cnsName);
         if (typeof socialRecords === 'string') return socialRecords;
 
