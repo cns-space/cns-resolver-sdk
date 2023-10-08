@@ -20,8 +20,14 @@ export class CNSResolver {
 
     resolveAddress = async (cnsName: string): Promise<string> => {
         const deconstructedCns = cnsName.split('.');
-        if (deconstructedCns.length === 2) return this.resolveDomain(cnsName);
-        if (deconstructedCns.length === 3) return this.resolveVirtualSubdomain(cnsName);
+        if (deconstructedCns.length === 2) {
+            const address = await this.resolveDomain(cnsName);
+            return address;
+        }
+        if (deconstructedCns.length === 3) {
+            const address = await this.resolveVirtualSubdomain(cnsName);
+            return address;
+        }
         return 'Invalid domain / virtual domain';
     };
 

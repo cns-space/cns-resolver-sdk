@@ -1,7 +1,7 @@
 {
   "name": "@cns-space/cns-resolver-sdk",
   "description": "CNS resolver sdk for querying on-chain user records",
-  "version": "0.1.3",
+  "version": "0.1.8",
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "module": "dist/mjs/index.js",
@@ -34,6 +34,7 @@
   "scripts": {
     "build": "rm -fr dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "ci": "yarn && yarn lint && yarn build",
+    "pub": "yarn ci && npm publish --access public",
     "lint": "eslint '*/**/*.ts' --fix",
     "prepare": "husky install"
   },

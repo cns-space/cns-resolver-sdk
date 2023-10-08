@@ -47,13 +47,13 @@ const records = await resolver.resolveUserRecord('cns.ada');
 
 ## Resolving Methodology
 
-| Item                       | Validation       | Resolving Methods                                                                                      | SDK API                                                                               |
-| -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| Domain Address             | Expiry           | 1. Get the current address the CNS residing on                                                         | [`resolveAddress`](./src/resolver/resolver.ts)                                        |
-| All User Records           | Expiry           | 1. Get the inline datum of the user record                                                             | [`resolveUserRecord`](./src/resolver/resolver.ts)                                     |
-| Virtual Sub-domain Address | Expiry & Enabled | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct virtual sub-domain key | [`resolveAddress` & `resolveVirtualSubdomains`](./src/resolver/resolver.ts)           |
-| Social Records             | Expiry           | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct social key             | Draft of [`resolveSocialRecord` & `resolveSocialRecords`](./src/resolver/resolver.ts) |
-| Customized Records         | Expiry           | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct key                    | Draft of [`resolveOtherRecord` & `resolveOtherRecords`](./src/resolver/resolver.ts)   |
+| Item                       | Validation       | Resolving Methods                                                                                      | SDK API                                                                      |
+| -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| Domain Address             | Expiry           | 1. Get the current address the CNS residing on                                                         | [`resolveAddress`](./src/resolver/resolver.ts)                               |
+| All User Records           | Expiry           | 1. Get the inline datum of the user record                                                             | [`resolveUserRecord`](./src/resolver/resolver.ts)                            |
+| Virtual Sub-domain Address | Expiry & Enabled | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct virtual sub-domain key | [`resolveAddress` & `resolveVirtualSubdomains`](./src/resolver/resolver.ts)  |
+| Social Records             | Expiry           | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct social key             | [`resolveSocialRecord` & `resolveSocialRecords`](./src/resolver/resolver.ts) |
+| Customized Records         | Expiry           | 1. Get the inline datum of the user record <br> 2. Resolve the one with correct key                    | [`resolveOtherRecord` & `resolveOtherRecords`](./src/resolver/resolver.ts)   |
 
 ## Validation Approach
 
