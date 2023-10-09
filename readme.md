@@ -4,6 +4,20 @@ This is the for resolving official CNS information. This documentation would out
 
 ## Getting Started
 
+### Install
+
+```
+yarn add @cns-space/cns-resolver-sdk
+```
+
+or
+
+```
+npm install @cns-space/cns-resolver-sdk
+```
+
+### Using the `resolver``
+
 ```ts
 import { CNSResolver, MaestroCNS } from '@cns-space/cns-resolver-sdk';
 
