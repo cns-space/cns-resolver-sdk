@@ -16,7 +16,7 @@ or
 npm install @cns-space/cns-resolver-sdk
 ```
 
-### Using the `resolver``
+### Using the `resolver`
 
 ```ts
 import { CNSResolver, MaestroCNS } from '@cns-space/cns-resolver-sdk';
@@ -76,13 +76,13 @@ const records = await resolver.resolveUserRecord('cns.ada');
     - Read the metadata attached with the CNS, and get the `expiry` field
     - Compare the `current millisecond` with `expiry` record
     - Valid if `current millisecond < expiry`
-    - [`Example implementation`](./packages/src/validators/expiry.ts)
+    - [`Example implementation`](./src/validators/expiry.ts)
 
 2. Enabled - Virtual Sub-domain Enabled
 
     - Read the metadata attached with the CNS, and get the virtual Subdomain.
     - Valid if `Enabled`
-    - [`Example implementation`](./packages/src/validators/virtualSubdomainEnabled.ts)
+    - [`Example implementation`](./src/validators/virtualSubdomainEnabled.ts)
 
 ## Schemas
 
