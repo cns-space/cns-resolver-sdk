@@ -1,10 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { Axios } from 'axios';
+import { MaestroClient, Configuration } from '@maestro-org/typescript-sdk';
+import { CNSMetadata, CNSUserRecord } from '../type';
 import { hexToString } from '../utils';
 import { CNSFetcher } from './fetcher';
 
+interface FullCNSMetaData {
+    [key: string]: {
+        [key: string]: {
+            [key: string]: CNSMetadata;
+        };
+    };
+}
+
 export class MaestroCNS extends CNSFetcher {
     axios: Axios;
+
+    maestro: MaestroClient;
 
     constructor(apiKey: string, network: 'mainnet' | 'preprod') {
         super(network);
@@ -15,25 +27,27 @@ export class MaestroCNS extends CNSFetcher {
                 'Content-Type': 'application/json',
             },
         });
+        this.maestro = new MaestroClient(
+            new Configuration({
+                apiKey,
+                network: network === 'mainnet' ? 'Mainnet' : 'Preprod',
+            }),
+        );
     }
 
     getAssetAddress = async (assetHex: string) => {
-        const response = await this.axios.get(`/assets/${assetHex}/addresses`);
-        return response.data.data;
+        const response = await this.maestro.assets.assetAddresses(assetHex);
+        return response.data.data[0]?.address;
     };
 
-    getMetadata = async <T>(policyID: string, assetName: string): Promise<T> => {
-        const response = await this.axios.get(`/assets/${policyID}${assetName}`);
-        return response.data.data.latest_mint_tx_metadata['721'][policyID][hexToString(assetName)];
+    getMetadata = async (policyID: string, assetName: string) => {
+        const response = await this.maestro.assets.assetInfo(policyID + assetName);
+        const fullMetadata = response.data.data.latest_mint_tx_metadata as FullCNSMetaData;
+        return fullMetadata['721'][policyID][hexToString(assetName)];
     };
 
-    getAssetInlineDatum = async <T>(assetHex: string): Promise<T> => {
-        const txData = await this.axios.get(`/assets/${assetHex}/txs?order=desc&count=1`);
-        const { tx_hash } = txData.data.data[0];
-        const recordTx = await this.axios.get(`/transactions/${tx_hash}`);
-        const inlineDatum = recordTx.data.data.outputs.find(
-            (o: any) => o.assets.findIndex((a: any) => a.unit === assetHex) !== -1,
-        )?.datum.json;
-        return inlineDatum;
+    getAssetInlineDatum = async (addr: string, assetHex: string) => {
+        const txData = await this.maestro.addresses.utxosByAddress(addr, { asset: assetHex });
+        return txData.data.data[0]?.datum?.json as CNSUserRecord;
     };
 }

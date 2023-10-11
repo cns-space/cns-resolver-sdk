@@ -19,10 +19,10 @@ export class BlockfrostCNS extends CNSFetcher {
 
     getAssetAddress = async (assetHex: string) => {
         const response = await this.axios.get(`/assets/${assetHex}/addresses`);
-        return response.data;
+        return response.data[0]?.address;
     };
 
-    getMetadata = async <T>(policyID: string, assetName: string): Promise<T> => {
+    getMetadata = async (policyID: string, assetName: string) => {
         const response = await this.axios.get(`/assets/${policyID}${assetName}`);
         return response.data.onchain_metadata;
     };

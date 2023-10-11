@@ -1,3 +1,5 @@
+import { CNSMetadata, CNSUserRecord } from '../type';
+
 export abstract class CNSFetcher {
     networkId: number;
 
@@ -8,9 +10,12 @@ export abstract class CNSFetcher {
         this.networkId = network === 'mainnet' ? 1 : 0;
     }
 
-    abstract getAssetAddress<T extends { address: string }[]>(assetHex: string): Promise<T>;
+    abstract getAssetAddress(assetHex: string): Promise<string | undefined>;
 
-    abstract getMetadata<T>(policyID: string, assetName: string): Promise<T>;
+    abstract getMetadata(policyID: string, assetName: string): Promise<CNSMetadata>;
 
-    abstract getAssetInlineDatum<T>(assetHex: string): Promise<T>;
+    abstract getAssetInlineDatum(
+        addr: string,
+        assetHex: string,
+    ): Promise<CNSUserRecord | undefined>;
 }

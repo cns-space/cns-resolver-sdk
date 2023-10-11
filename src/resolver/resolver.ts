@@ -3,7 +3,7 @@ import {
     validateExpiry,
     validateVirtualSubdomainEnabled,
 } from '../validators';
-import { CNSMetadata, CNSUserRecord, ParsedCNSUserRecord, SocialRecord } from '../type';
+import { CNSMetadata, ParsedCNSUserRecord, SocialRecord } from '../type';
 import { CNSFetcher } from '../fetcher/fetcher';
 import { CNSConstants } from '../constants';
 import { hexToString, objToHex, parseAssocMap, parsePlutusAddressToBech32 } from '../utils';
@@ -34,34 +34,39 @@ export class CNSResolver {
     private resolveDomain = async (cnsName: string): Promise<string> => {
         const assetName = Buffer.from(cnsName).toString('hex');
         const assetHex = `${this.constants.cnsPolicyID}${assetName}`;
-
-        const metadata: CNSMetadata = await this.fetcher.getMetadata(
-            this.constants.cnsPolicyID,
-            assetName,
-        );
-
+        let metadata: CNSMetadata;
+        try {
+            metadata = await this.fetcher.getMetadata(this.constants.cnsPolicyID, assetName);
+        } catch {
+            return 'CNS not found';
+        }
         if (!validateExpiry(metadata)) return 'CNS expired';
 
-        const data = await this.fetcher.getAssetAddress(assetHex);
-        if (!data) return 'CNS not found';
+        const address = await this.fetcher.getAssetAddress(assetHex);
+        if (!address) return 'CNS not found';
 
-        const { address } = data[0];
         return address;
     };
 
     resolveUserRecord = async (cnsName: string): Promise<ParsedCNSUserRecord | string> => {
         const assetName = Buffer.from(cnsName).toString('hex');
 
-        const metadata: CNSMetadata = await this.fetcher.getMetadata(
-            this.constants.cnsPolicyID,
-            assetName,
-        );
+        let metadata: CNSMetadata;
+        try {
+            metadata = await this.fetcher.getMetadata(this.constants.cnsPolicyID, assetName);
+        } catch {
+            return 'CNS not found';
+        }
 
         if (!validateExpiry(metadata)) return 'CNS expired';
 
         const recordAssetHex = `${this.constants.recordPolicyID}${assetName}`;
-        const inlineDatum: CNSUserRecord = await this.fetcher.getAssetInlineDatum(recordAssetHex);
+        const inlineDatum = await this.fetcher.getAssetInlineDatum(
+            this.constants.recordAddress,
+            recordAssetHex,
+        );
 
+        if (!inlineDatum) return 'User record not found';
         if (!validateCNSUserRecord(inlineDatum)) return 'Invalid user record';
         if (!validateVirtualSubdomainEnabled(metadata))
             console.log('Virtual subdomain is not enabled');

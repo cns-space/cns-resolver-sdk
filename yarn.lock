@@ -779,10 +779,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@maestro-org/typescript-sdk@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@maestro-org/typescript-sdk/-/typescript-sdk-1.0.0.tgz#9d0d107e0dc7eaa7a5ed9cff56b33d9923eee5ff"
-  integrity sha512-iemkjUFWWzPX/gxUF7Zz9ESQtw3gSAZ7sDdS8Y9Bde5QrABU6MbaQjVHiXa3Lox5Ika7PeIHgUEVKdmAsTYVCQ==
+"@maestro-org/typescript-sdk@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@maestro-org/typescript-sdk/-/typescript-sdk-1.2.2.tgz#328983feb0afdec1b44e2cc3323a4f2c83c58e1b"
+  integrity sha512-Jz2wKQr/FGvLeVPvcfmTc4D1rtUI9tAhrt8tWWsfYztpvVFd7/D4K/YhpxJhGxYb/3JIK2tM5IsPWlL9qvgg0A==
   dependencies:
     axios "^1.5.0"
 
