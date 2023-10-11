@@ -33,11 +33,8 @@ jobs:
                   node-version: 18
                   registry-url: https://registry.npmjs.org/
             - run: yarn ci
-            - name: Check Commit Messages
-              id: commit_check
-              run: echo ::set-output name=skip_publish::$(if [[ "${{ github.event_name }}" == 'push' && "${{ github.event.head_commit.message }}" =~ '^(docs:|chore:)' ]]; then echo 'true'; else echo 'false'; fi)
             - run: |
-                  if [[ "${{ steps.commit_check.outputs.skip_publish }}" == 'true' ]]; then
+                  if [[ "${{ github.event.head_commit.message }}" =~ ^(docs:|chore:) ]]; then
                     echo "Skipping npm publish due to commit message."
                   else
                     npm publish --access public
