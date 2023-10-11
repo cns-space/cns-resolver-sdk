@@ -14,13 +14,24 @@ on:
             - main
 
 jobs:
-    publish-npm:
+    build:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                   node-version: 18
+            - run: yarn ci
+
+    publish-npm:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  registry-url: https://registry.npmjs.org/
             - run: yarn ci
             - run: |
                   if [[ "${{ github.event.head_commit.message }}" =~ ^(docs:|chore:) ]]; then
