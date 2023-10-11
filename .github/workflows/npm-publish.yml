@@ -36,16 +36,7 @@ jobs:
             - name: Check Commit Messages
               id: commit_check
               run: |
-                  commit_message=$(git log --format=%B -n 1 ${{ github.sha }})
-                  if [[ "${{ github.event_name }}" == 'push' && $commit_message =~ '^(docs:|chore:)' ]]; then
-                    echo "Skipping npm publish due to commit message."
-                    echo "skip_publish=true" >> $GITHUB_ENV
-                  else
-                    echo "skip_publish=false" >> $GITHUB_ENV
-                  fi
-
-            - run: |
-                  if [[ "${{ env.skip_publish }}" == 'true' ]]; then
+                  if [[ "${{ github.event_name }}" == 'push' && ${{ github.event.head_commit.message}} =~ '^(docs:|chore:)' ]]; then
                     echo "Skipping npm publish due to commit message."
                   else
                     npm publish --access public
