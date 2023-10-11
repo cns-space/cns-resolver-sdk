@@ -35,7 +35,7 @@ jobs:
             - run: yarn ci
             - name: Check Commit Messages
               id: commit_check
-              run: echo ::set-output name=skip_publish::$(if (echo "${{ github.event_name }}" == 'push' && $(git log --format=%B -n 1 ${{ github.sha }}) =~ '^(docs|chore)'), 'true', 'false')
+              run: echo ::set-output name=skip_publish::$(if ([[ "${{ github.event_name }}" == 'push' && $(git log --format=%B -n 1 ${{ github.sha }}) =~ '^(docs:|chore:)' ]]), 'true', 'false')
 
             - run: |
                   if [[ "${{ steps.commit_check.outputs.skip_publish }}" == 'true' ]]; then
