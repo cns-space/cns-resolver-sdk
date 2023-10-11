@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { Axios } from 'axios';
+import { CNSUserRecord } from 'type';
 import { parseInlineDatum } from '../utils';
 import { CNSFetcher } from './fetcher';
 
@@ -27,14 +28,14 @@ export class BlockfrostCNS extends CNSFetcher {
         return response.data.onchain_metadata;
     };
 
-    getAssetInlineDatum = async <T>(assetHex: string): Promise<T> => {
+    getAssetInlineDatum = async (assetHex: string) => {
         const txData = await this.axios.get(`/assets/${assetHex}/transactions?order=desc&count=1`);
         const { tx_hash } = txData.data[0];
         const recordTx = await this.axios.get(`/txs/${tx_hash}/utxos`);
         const rawInlineDatum = recordTx.data.outputs.find(
             (o: any) => o.amount.findIndex((a: any) => a.unit === assetHex) !== -1,
         )?.inline_datum;
-        const inlineDatum = parseInlineDatum<T>(rawInlineDatum);
-        return inlineDatum;
+        const inlineDatum = parseInlineDatum(rawInlineDatum);
+        return inlineDatum as CNSUserRecord;
     };
 }
