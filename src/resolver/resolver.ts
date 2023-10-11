@@ -34,12 +34,11 @@ export class CNSResolver {
     private resolveDomain = async (cnsName: string): Promise<string> => {
         const assetName = Buffer.from(cnsName).toString('hex');
         const assetHex = `${this.constants.cnsPolicyID}${assetName}`;
-        let metadata: CNSMetadata;
-        try {
-            metadata = await this.fetcher.getMetadata(this.constants.cnsPolicyID, assetName);
-        } catch {
-            return 'CNS not found';
-        }
+        const metadata: CNSMetadata = await this.fetcher.getMetadata(
+            this.constants.cnsPolicyID,
+            assetName,
+        );
+        if (!metadata) return 'CNS not found';
         if (!validateExpiry(metadata)) return 'CNS expired';
 
         const address = await this.fetcher.getAssetAddress(assetHex);
@@ -51,13 +50,11 @@ export class CNSResolver {
     resolveUserRecord = async (cnsName: string): Promise<ParsedCNSUserRecord | string> => {
         const assetName = Buffer.from(cnsName).toString('hex');
 
-        let metadata: CNSMetadata;
-        try {
-            metadata = await this.fetcher.getMetadata(this.constants.cnsPolicyID, assetName);
-        } catch {
-            return 'CNS not found';
-        }
-
+        const metadata: CNSMetadata = await this.fetcher.getMetadata(
+            this.constants.cnsPolicyID,
+            assetName,
+        );
+        if (!metadata) return 'CNS not found';
         if (!validateExpiry(metadata)) return 'CNS expired';
 
         const recordAssetHex = `${this.constants.recordPolicyID}${assetName}`;
