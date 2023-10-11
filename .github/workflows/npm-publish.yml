@@ -35,7 +35,7 @@ jobs:
             - run: yarn ci
             - name: Check Commit Messages
               id: commit_check
-              run: echo ::set-output name=skip_publish::$(if ([[ "${{ github.event_name }}" == 'push' && $("${{github.event.head_commit.message}}" =~ '^(docs:|chore:)' ]]), 'true', 'false')
+              run: echo ::set-output name=skip_publish::$(if [[ "${{ github.event_name }}" == 'push' && "${{ github.event.head_commit.message }}" =~ '^(docs:|chore:)' ]]; then echo 'true'; else echo 'false'; fi)
             - run: |
                   if [[ "${{ steps.commit_check.outputs.skip_publish }}" == 'true' ]]; then
                     echo "Skipping npm publish due to commit message."
