@@ -35,7 +35,7 @@
     "build": "rm -fr dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "ci": "yarn && yarn lint && yarn build",
     "pub": "yarn ci && npm publish --access public",
-    "lint": "eslint '*/**/*.ts' --fix",
+    "lint": "eslint 'src/*.ts' --fix",
     "prepare": "husky install"
   },
   "browser": {
@@ -70,7 +70,7 @@
     "typescript": "^5.1.6"
   },
   "lint-staged": {
-    "**/*.{js,ts,}": [
+    "src/*.{js,ts,}": [
       "yarn prettier --write",
       "yarn eslint --fix"
     ]
