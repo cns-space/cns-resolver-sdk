@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { Axios } from 'axios';
 import { MaestroClient, Configuration } from '@maestro-org/typescript-sdk';
 import { CNSMetadata, CNSUserRecord } from '../type';
 import { hexToString } from '../utils';
@@ -14,19 +13,10 @@ interface FullCNSMetaData {
 }
 
 export class MaestroCNS extends CNSFetcher {
-    axios: Axios;
-
     maestro: MaestroClient;
 
     constructor(apiKey: string, network: 'mainnet' | 'preprod') {
         super(network);
-        this.axios = axios.create({
-            baseURL: `https://${network}.gomaestro-api.org/v1`,
-            headers: {
-                'api-key': apiKey,
-                'Content-Type': 'application/json',
-            },
-        });
         this.maestro = new MaestroClient(
             new Configuration({
                 apiKey,
