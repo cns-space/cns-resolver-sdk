@@ -31,9 +31,14 @@ export class MaestroCNS extends CNSFetcher {
     };
 
     getMetadata = async (policyID: string, assetName: string) => {
-        const response = await this.maestro.assets.assetInfo(policyID + assetName);
-        const fullMetadata = response.data.data.latest_mint_tx_metadata as FullCNSMetaData;
-        return fullMetadata['721'][policyID][hexToString(assetName)];
+        const res = await this.maestro.assets
+            .assetInfo(policyID + assetName)
+            .then((response) => {
+                const fullMetadata = response.data.data.latest_mint_tx_metadata as FullCNSMetaData;
+                return fullMetadata['721'][policyID][hexToString(assetName)] as CNSMetadata;
+            })
+            .catch(() => undefined);
+        return res;
     };
 
     getAssetInlineDatum = async (addr: string, assetHex: string) => {

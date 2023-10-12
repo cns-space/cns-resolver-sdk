@@ -24,8 +24,11 @@ export class BlockfrostCNS extends CNSFetcher {
     };
 
     getMetadata = async (policyID: string, assetName: string) => {
-        const response = await this.axios.get(`/assets/${policyID}${assetName}`);
-        return response.data.onchain_metadata;
+        const res = await this.axios
+            .get(`/assets/${policyID}${assetName}`)
+            .then((response) => response.data.onchain_metadata)
+            .catch(() => undefined);
+        return res;
     };
 
     getAssetInlineDatum = async (assetHex: string) => {
@@ -35,7 +38,7 @@ export class BlockfrostCNS extends CNSFetcher {
         const rawInlineDatum = recordTx.data.outputs.find(
             (o: any) => o.amount.findIndex((a: any) => a.unit === assetHex) !== -1,
         )?.inline_datum;
-        const inlineDatum = parseInlineDatum(rawInlineDatum);
-        return inlineDatum as CNSUserRecord;
+        const inlineDatum = parseInlineDatum<CNSUserRecord | undefined>(rawInlineDatum);
+        return inlineDatum;
     };
 }

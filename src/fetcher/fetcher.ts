@@ -12,7 +12,7 @@ export abstract class CNSFetcher {
 
     abstract getAssetAddress(assetHex: string): Promise<string | undefined>;
 
-    abstract getMetadata(policyID: string, assetName: string): Promise<CNSMetadata>;
+    abstract getMetadata(policyID: string, assetName: string): Promise<CNSMetadata | undefined>;
 
     abstract getAssetInlineDatum(
         addr: string,

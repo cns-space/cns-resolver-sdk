@@ -3,7 +3,7 @@ import {
     validateExpiry,
     validateVirtualSubdomainEnabled,
 } from '../validators';
-import { CNSMetadata, ParsedCNSUserRecord, SocialRecord } from '../type';
+import { ParsedCNSUserRecord, SocialRecord } from '../type';
 import { CNSFetcher } from '../fetcher/fetcher';
 import { CNSConstants } from '../constants';
 import { hexToString, objToHex, parseAssocMap, parsePlutusAddressToBech32 } from '../utils';
@@ -34,10 +34,7 @@ export class CNSResolver {
     private resolveDomain = async (cnsName: string): Promise<string> => {
         const assetName = Buffer.from(cnsName).toString('hex');
         const assetHex = `${this.constants.cnsPolicyID}${assetName}`;
-        const metadata: CNSMetadata = await this.fetcher.getMetadata(
-            this.constants.cnsPolicyID,
-            assetName,
-        );
+        const metadata = await this.fetcher.getMetadata(this.constants.cnsPolicyID, assetName);
         if (!metadata) return 'CNS not found';
         if (!validateExpiry(metadata)) return 'CNS expired';
 
@@ -50,10 +47,7 @@ export class CNSResolver {
     resolveUserRecord = async (cnsName: string): Promise<ParsedCNSUserRecord | string> => {
         const assetName = Buffer.from(cnsName).toString('hex');
 
-        const metadata: CNSMetadata = await this.fetcher.getMetadata(
-            this.constants.cnsPolicyID,
-            assetName,
-        );
+        const metadata = await this.fetcher.getMetadata(this.constants.cnsPolicyID, assetName);
         if (!metadata) return 'CNS not found';
         if (!validateExpiry(metadata)) return 'CNS expired';
 
@@ -65,9 +59,6 @@ export class CNSResolver {
 
         if (!inlineDatum) return 'User record not found';
         if (!validateCNSUserRecord(inlineDatum)) return 'Invalid user record';
-        if (!validateVirtualSubdomainEnabled(metadata))
-            console.log('Virtual subdomain is not enabled');
-
         const parsedInlineDatum: ParsedCNSUserRecord = {
             virtualSubdomains: validateVirtualSubdomainEnabled(metadata)
                 ? parseAssocMap(inlineDatum.fields[0], (item) =>
