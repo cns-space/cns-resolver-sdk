@@ -1,6 +1,6 @@
-const preprodCnsPolicyID = 'ab4e38cc1e95e42c6f6e56d8d4243731c483bb57e49da5047c38e9d8';
-const preprodRecordPolicyID = '08639fb15c8998bce333f9fa81214b3250da45262162999a56d21b76';
-const preprodRecordAddress = 'addr_test1wr28gyqex4z75w2wmcss6ytkr4s2us36q2etdtjv3fgscfsp8d733';
+const preprodCnsPolicyID = 'baefdc6c5b191be372a794cd8d40d839ec0dbdd3c28957267dc81700';
+const preprodRecordPolicyID = 'a048db3b45c2aa5f1ad472338e6e6dea41a45f4350c8753a231403aa';
+const preprodRecordAddress = 'addr_test1wzzfgjazt5ts34cstrhzaac4xav8x7z2m3vg76s8qmaztzglsw8k5';
 
 // TODO: Change after mainnet launch
 const mainnetCnsPolicyID = '';
