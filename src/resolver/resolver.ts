@@ -34,6 +34,7 @@ export class CNSResolver {
     private resolveDomain = async (cnsName: string): Promise<string> => {
         const assetName = Buffer.from(cnsName).toString('hex');
         const assetHex = `${this.constants.cnsPolicyID}${assetName}`;
+
         const metadata = await this.fetcher.getMetadata(this.constants.cnsPolicyID, assetName);
         if (!metadata) return 'CNS not found';
         if (!validateExpiry(metadata)) return 'CNS expired';
