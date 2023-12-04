@@ -31,7 +31,7 @@ export class BlockfrostCNS extends CNSFetcher {
         return res;
     };
 
-    getAssetInlineDatum = async (assetHex: string) => {
+    getAssetInlineDatum = async (_addr: string, assetHex: string) => {
         const txData = await this.axios.get(`/assets/${assetHex}/transactions?order=desc&count=1`);
         const { tx_hash } = txData.data[0];
         const recordTx = await this.axios.get(`/txs/${tx_hash}/utxos`);
