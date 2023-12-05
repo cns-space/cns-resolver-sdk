@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { MaestroClient, Configuration } from '@maestro-org/typescript-sdk';
 import { CNSMetadata, CNSUserRecord } from '../type';
-import { hexToString } from '../utils';
+import { CSLParser, hexToString } from '../utils';
 import { CNSFetcher } from './fetcher';
 
 interface FullCNSMetaData {
@@ -15,8 +15,8 @@ interface FullCNSMetaData {
 export class MaestroCNS extends CNSFetcher {
     maestro: MaestroClient;
 
-    constructor(apiKey: string, network: 'mainnet' | 'preprod') {
-        super(network);
+    constructor(apiKey: string, network: 'mainnet' | 'preprod', parser?: CSLParser) {
+        super(network, parser);
         this.maestro = new MaestroClient(
             new Configuration({
                 apiKey,

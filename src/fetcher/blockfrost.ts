@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { Axios } from 'axios';
-import { CNSUserRecord } from 'type';
-import { parseInlineDatum } from '../utils';
+import { CNSUserRecord } from '../type';
+import { CSLParser } from '../utils';
 import { CNSFetcher } from './fetcher';
 
 export class BlockfrostCNS extends CNSFetcher {
     axios: Axios;
 
-    constructor(apiKey: string, network: 'mainnet' | 'preprod') {
-        super(network);
+    constructor(apiKey: string, network: 'mainnet' | 'preprod', parser?: CSLParser) {
+        super(network, parser);
         this.axios = axios.create({
             baseURL: `https://cardano-${network}.blockfrost.io/api/v0`,
             headers: {
@@ -38,7 +38,9 @@ export class BlockfrostCNS extends CNSFetcher {
         const rawInlineDatum = recordTx.data.outputs.find(
             (o: any) => o.amount.findIndex((a: any) => a.unit === assetHex) !== -1,
         )?.inline_datum;
-        const inlineDatum = parseInlineDatum<CNSUserRecord | undefined>(rawInlineDatum);
+        const inlineDatum = await this.parser.parseInlineDatum<CNSUserRecord | undefined>(
+            rawInlineDatum,
+        );
         return inlineDatum;
     };
 }

@@ -1,7 +1,48 @@
-/* eslint-disable import/no-extraneous-dependencies */
-// import csl from '@emurgo/cardano-serialization-lib-nodejs';
 import { WasmModuleProxy } from '@emurgo/cross-csl-core';
 import { AssocMap, BuiltinByteString } from '../type/plutus';
+
+export const stringToHex = (str: string) => Buffer.from(str, 'utf8').toString('hex');
+
+export const hexToString = (hex: string) => Buffer.from(hex, 'hex').toString('utf8');
+
+export const parseAssocMap = <T>(
+    assocMapVal: AssocMap<BuiltinByteString, T>,
+    itemParser: (args0: T) => string,
+    limit = 5,
+): string[][] => {
+    const parsedAssocMap: string[][] = [];
+    for (let i = 0; i < limit; i += 1) {
+        if (i >= assocMapVal.map.length) break;
+        const mapItem = assocMapVal.map[i];
+        const key = hexToString(mapItem.k.bytes);
+        const value = itemParser(mapItem.v);
+        parsedAssocMap.push([key, value]);
+    }
+    return parsedAssocMap;
+};
+
+export const parseAssocMapAsync = async <T>(
+    assocMapVal: AssocMap<BuiltinByteString, T>,
+    itemParser: (args0: T) => Promise<string>,
+    limit = 5,
+): Promise<string[][]> => {
+    const parsedAssocMap: string[][] = [];
+    const promises: Promise<string>[] = [];
+    for (let i = 0; i < limit; i += 1) {
+        if (i >= assocMapVal.map.length) break;
+        const mapItem = assocMapVal.map[i];
+        promises.push(itemParser(mapItem.v));
+    }
+    const valueArray = await Promise.all(promises);
+    for (let i = 0; i < limit; i += 1) {
+        if (i >= assocMapVal.map.length) break;
+        const mapItem = assocMapVal.map[i];
+        const key = hexToString(mapItem.k.bytes);
+        const value = valueArray[i];
+        parsedAssocMap.push([key, value]);
+    }
+    return parsedAssocMap;
+};
 
 export class CSLParser {
     csl: WasmModuleProxy;
@@ -10,31 +51,11 @@ export class CSLParser {
         this.csl = csl;
     }
 
-    static stringToHex = (str: string) => Buffer.from(str, 'utf8').toString('hex');
-
-    static hexToString = (hex: string) => Buffer.from(hex, 'hex').toString('utf8');
-
     parseInlineDatum = async <T>(inlineDatum: string): Promise<T> => {
         const datum = await this.csl.PlutusData.fromHex(inlineDatum);
         const jsonDatum = await datum.toJson(1);
         const parsed = JSON.parse(jsonDatum);
         return parsed;
-    };
-
-    static parseAssocMap = <T>(
-        assocMapVal: AssocMap<BuiltinByteString, T>,
-        itemParser: (args0: T) => string,
-        limit = 5,
-    ): string[][] => {
-        const parsedAssocMap: string[][] = [];
-        for (let i = 0; i < limit; i += 1) {
-            if (i >= assocMapVal.map.length) break;
-            const mapItem = assocMapVal.map[i];
-            const key = CSLParser.hexToString(mapItem.k.bytes);
-            const value = itemParser(mapItem.v);
-            parsedAssocMap.push([key, value]);
-        }
-        return parsedAssocMap;
     };
 
     hexToObj = async <T>(hex: string): Promise<T> => {

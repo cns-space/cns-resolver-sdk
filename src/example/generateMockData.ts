@@ -1,6 +1,7 @@
+import cslNode from '@emurgo/cross-csl-nodejs';
 import { CNSUserRecord, cnsUserRecord } from '../type/cnsUserRecord';
 import { PubKeyAddress, ScriptAddress } from '../type/plutus';
-import { addrBech32ToObj, stringToHex } from '../utils';
+import { CSLParser, stringToHex } from '../utils';
 
 const virtualDomains = [
     ['script', 'addr_test1wpfst96dzagcy3wyz0r7xsm5acpx8w88w7sgjhr33cw347qsch0tg'],
@@ -40,11 +41,12 @@ const makeCNSUserRecord = (
     socialProfilesI: string[][],
     otherRecordsI: string[][],
 ): CNSUserRecord => {
+    const parser = new CSLParser(cslNode.init('ctx'));
     const virtualDomainsHashes: [string, PubKeyAddress | ScriptAddress][] = [];
     const socialProfilesHexes: [string, string][] = [];
     const otherRecordsHexes: [string, string][] = [];
-    virtualDomainsI.forEach(([virtualDomain, bech32Addr]) => {
-        const obj: PubKeyAddress | ScriptAddress = addrBech32ToObj(bech32Addr);
+    virtualDomainsI.forEach(async ([virtualDomain, bech32Addr]) => {
+        const obj: PubKeyAddress | ScriptAddress = await parser.addrBech32ToObj(bech32Addr);
         virtualDomainsHashes.push([stringToHex(virtualDomain), obj]);
     });
 

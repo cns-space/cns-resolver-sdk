@@ -482,17 +482,25 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@emurgo/cardano-serialization-lib-browser@^11.5.0":
-  version "11.5.0"
-  resolved "https://registry.npmjs.org/@emurgo/cardano-serialization-lib-browser/-/cardano-serialization-lib-browser-11.5.0.tgz"
-  integrity sha512-qchOJ9NYDUz10tzs5r5QhP9hK0p+ZOlRiBwPdTAxqAYLw/8emYBkQQLaS8T1DF6EkeudyrgS00ym5Trw1fo4iA==
+"@emurgo/cardano-serialization-lib-browser@12.0.0-alpha.9":
+  version "12.0.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@emurgo/cardano-serialization-lib-browser/-/cardano-serialization-lib-browser-12.0.0-alpha.9.tgz#f87d4ae2e34f68fe5718666cf0d71bb41706bcf5"
+  integrity sha512-JzuOiuVeri+G1TQosfUXDZ+jgPKByH8DqO3nfVKAuP/VzuRhT38oBxFr5YivSMGUaQ6P4XScL4n79mwa2Lpxeg==
 
-"@emurgo/cardano-serialization-lib-nodejs@^11.4.0":
-  version "11.4.0"
-  resolved "https://registry.npmjs.org/@emurgo/cardano-serialization-lib-nodejs/-/cardano-serialization-lib-nodejs-11.4.0.tgz"
-  integrity sha512-dMiofDcqv+IrAITCgWBZmsMLqwv2xImDsJDSrKiYYG1zRKaL8XfMOxx6S0WEnKVj5/343Q5FFURYcSu3iBRNMQ==
+"@emurgo/cardano-serialization-lib-nodejs@12.0.0-alpha.9":
+  version "12.0.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@emurgo/cardano-serialization-lib-nodejs/-/cardano-serialization-lib-nodejs-12.0.0-alpha.9.tgz#bc7cb9185d7622cc3ac8fc7803fabdf676d699cf"
+  integrity sha512-XA4VxKqSTqHDhoBJWfgygVZ6wijwJiE9gozEdbdViK6kjKsSNnJ0hnuFt1LYI9b9yzk3FZlJdIKOyLaBBDmXbQ==
 
-"@emurgo/cross-csl-core@^3.6.0":
+"@emurgo/cross-csl-browser@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@emurgo/cross-csl-browser/-/cross-csl-browser-3.6.0.tgz#abbe7ad07b75bb96ac127b36636fa32b651f02c8"
+  integrity sha512-38CudDmoHqsSGPhi3tCa6cKoE8mB5OkqtnPni60Fe5anzo4JgZYHO6KQvz31Pvsa7Ba2bVzhmqkQXpQeMw8ffQ==
+  dependencies:
+    "@emurgo/cardano-serialization-lib-browser" "12.0.0-alpha.9"
+    "@emurgo/cross-csl-core" "3.6.0"
+
+"@emurgo/cross-csl-core@3.6.0", "@emurgo/cross-csl-core@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@emurgo/cross-csl-core/-/cross-csl-core-3.6.0.tgz#0e7cced722820c77f94f8104e706c2d88c8773f4"
   integrity sha512-Lt4czQ67LMQUybcMnivd87CiEHZaNge9OeqIda0zLMVwQ4TaausbooWGG3q7hGFOkO0djYWHd+WihzZgRng5yw==
@@ -505,6 +513,14 @@
     blake2b "^2.1.4"
     hash-wasm "^4.9.0"
     mocha "^10.0.0"
+
+"@emurgo/cross-csl-nodejs@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@emurgo/cross-csl-nodejs/-/cross-csl-nodejs-3.6.0.tgz#b8b7b368fa633485408db1c287eba3fd1907b36f"
+  integrity sha512-VtS6jU4YNY2VKwVxAzdaMy38NgQA6l3fs+v3LUcqcl1wmVw6WY/YVbEcR8rMTMlsiOet9tZdY+SBdR9CnzbSxw==
+  dependencies:
+    "@emurgo/cardano-serialization-lib-nodejs" "12.0.0-alpha.9"
+    "@emurgo/cross-csl-core" "3.6.0"
 
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"

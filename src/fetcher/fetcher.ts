@@ -1,3 +1,5 @@
+import { init } from '@emurgo/cross-csl-nodejs';
+import { CSLParser } from '../utils';
 import { CNSMetadata, CNSUserRecord } from '../type';
 
 /**
@@ -9,9 +11,16 @@ export abstract class CNSFetcher {
 
     network: 'mainnet' | 'preprod';
 
-    constructor(network: 'mainnet' | 'preprod') {
+    parser: CSLParser;
+
+    constructor(network: 'mainnet' | 'preprod', parser?: CSLParser) {
         this.network = network;
         this.networkId = network === 'mainnet' ? 1 : 0;
+        if (parser) {
+            this.parser = parser;
+        } else {
+            this.parser = new CSLParser(init('ctx'));
+        }
     }
 
     /**

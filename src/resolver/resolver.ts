@@ -1,3 +1,5 @@
+import { init } from '@emurgo/cross-csl-nodejs';
+import { WasmModuleProxy } from '@emurgo/cross-csl-core';
 import {
     validateCNSUserRecord,
     validateExpiry,
@@ -6,15 +8,23 @@ import {
 import { ParsedCNSUserRecord, SocialRecord } from '../type';
 import { CNSFetcher } from '../fetcher/fetcher';
 import { CNSConstants } from '../constants';
-import { hexToString, objToHex, parseAssocMap, parsePlutusAddressToBech32 } from '../utils';
+import { CSLParser, hexToString, parseAssocMap, parseAssocMapAsync } from '../utils';
 
 export class CNSResolver {
     fetcher: CNSFetcher;
 
     constants: CNSConstants;
 
-    constructor(fetcher: CNSFetcher) {
+    parser: CSLParser;
+
+    constructor(fetcher: CNSFetcher, parserProxy?: WasmModuleProxy) {
         this.fetcher = fetcher;
+        if (parserProxy) {
+            this.parser = new CSLParser(parserProxy);
+        } else {
+            this.parser = new CSLParser(init('ctx'));
+        }
+        this.fetcher.parser = this.parser;
         this.constants = new CNSConstants(fetcher.network);
     }
 
@@ -60,12 +70,16 @@ export class CNSResolver {
 
         if (!inlineDatum) return 'User record not found';
         if (!validateCNSUserRecord(inlineDatum)) return 'Invalid user record';
+        const virtualSubdomains = await parseAssocMapAsync(inlineDatum.fields[0], async (item) => {
+            const itemHex = await this.parser.objToHex(item);
+            const bech32 = await this.parser.parsePlutusAddressToBech32(
+                itemHex,
+                this.fetcher.networkId || 0,
+            );
+            return bech32;
+        });
         const parsedInlineDatum: ParsedCNSUserRecord = {
-            virtualSubdomains: validateVirtualSubdomainEnabled(metadata)
-                ? parseAssocMap(inlineDatum.fields[0], (item) =>
-                      parsePlutusAddressToBech32(objToHex(item), this.fetcher.networkId || 0),
-                  )
-                : [],
+            virtualSubdomains: validateVirtualSubdomainEnabled(metadata) ? virtualSubdomains : [],
             socialProfiles: parseAssocMap(inlineDatum.fields[1], (item) => hexToString(item.bytes)),
             otherRecords: parseAssocMap(inlineDatum.fields[2], (item) => hexToString(item.bytes)),
         };
