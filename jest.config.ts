@@ -5,7 +5,7 @@ const jestConfig: Config = {
     maxWorkers: 1,
     preset: 'ts-jest',
     testEnvironment: 'node',
-    testMatch: ['**/src/**/*.test.ts'],
+    testMatch: ['**/src/**/*.test.ts', '**/tests/**/*'],
     moduleNameMapper: {
         '^@resolver/(.*)$': '<rootDir>/src/resolver/$1',
         '^@types/(.*)$': '<rootDir>/src/types/$1',

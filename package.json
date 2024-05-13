@@ -36,6 +36,7 @@
     "ci": "yarn && yarn lint && yarn build",
     "pub": "yarn ci && npm publish --access public",
     "lint": "eslint 'src/*.ts' --fix",
+    "test": "jest",
     "prepare": "husky install"
   },
   "browser": {
@@ -58,6 +59,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
     "commitlint": "^17.4.3",
+    "dotenv": "^16.4.5",
     "eslint": "^8.39.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.8.0",
@@ -68,6 +70,7 @@
     "jest": "^29.5.0",
     "prettier": "^2.8.8",
     "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.1.6"
   },
   "lint-staged": {
